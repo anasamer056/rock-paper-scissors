@@ -5,6 +5,7 @@ const computerChoice = document.querySelector(".computer-choice")
 const roundResult = document.querySelector(".round-result");
 const counter = document.querySelector(".counter");
 const resetButton = document.querySelector(".reset-button");
+const finalResult = document.querySelector(".final-result");
 
 let usrScore = 0;
 let comScore = 0;
@@ -16,6 +17,7 @@ userButtonsContainer.addEventListener("click", (event)=>{
     if (selectedButton.className == "reset-button") return;
 
     game(userChoice = selectedButton.value);
+    getRoundWinner()
 });
 
 resetButton.addEventListener("click", ()=> {
@@ -25,7 +27,20 @@ resetButton.addEventListener("click", ()=> {
 
 });
 
+function getRoundWinner(){
+    if (usrScore < 3 && comScore < 3) return;
 
+    // 1 means user wins
+    // -1 means computer wins 
+    if (usrScore > comScore){
+        finalResult.textContent = "Congrats! You win!"
+    }
+    else if (comScore > usrScore){
+        finalResult.textContent = "Uh-oh... Computer won that one."
+    };
+
+    [usrScore, comScore] = [0,0];
+}
 
 function getComputerChoice() {
     // Generate a random number and use it to return the choice from a list
