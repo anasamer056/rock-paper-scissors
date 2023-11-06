@@ -1,3 +1,32 @@
+const userChoiceButton = document.querySelectorAll(".input")
+const userButtonsContainer = document.querySelector(".buttons-container");
+const resultsNodeList = document.querySelectorAll(".results-container > *")
+const computerChoice = document.querySelector(".computer-choice")
+const roundResult = document.querySelector(".round-result");
+const counter = document.querySelector(".counter");
+const resetButton = document.querySelector(".reset-button");
+
+let usrScore = 0;
+let comScore = 0;
+
+userButtonsContainer.addEventListener("click", (event)=>{
+    
+    let selectedButton = event.target;
+    if (selectedButton.tagName != "BUTTON") return;
+    if (selectedButton.className == "reset-button") return;
+
+    game(userChoice = selectedButton.value);
+});
+
+resetButton.addEventListener("click", ()=> {
+    [usrScore, comScore] = [0,0];
+    resultsNodeList.forEach((elem)=> elem.textContent = "") 
+
+
+});
+
+
+
 function getComputerChoice() {
     // Generate a random number and use it to return the choice from a list
     let choice = Math.floor(Math.random() * 3);
@@ -6,7 +35,7 @@ function getComputerChoice() {
 }
 
 function startRound(comChoice, usrChoice) {
-
+    
     const legend = {
         "rock" : "scissors",
         "scissors" : "paper", 
@@ -29,16 +58,11 @@ function startRound(comChoice, usrChoice) {
     }
 }
 
-function game() {
-
-    let usrScore = 0;
-    let comScore = 0;
-
-    // Play 5 rounds
-    for (let i = 0; i < 5; i++) {
+function game(usrChoice) {
+    resultsNodeList.forEach((elem)=> elem.textContent = "")
 
         let comChoice = getComputerChoice();
-        let usrChoice = prompt("Rock, paper or scissors?", "rock");
+        computerChoice.textContent = "Computer chose: " + capitalize(comChoice);
         let result;
         try {
             result = startRound(comChoice, usrChoice);
@@ -48,24 +72,25 @@ function game() {
         } 
 
         if (result === 0) {
-            console.log("It's a tie!");
+            roundResult.textContent = "It's a tie";
+            counter.textContent = `You: ${usrScore}, Computer: ${comScore}`;
         } else if (result < 0) {
-            console.log(`Computer wins! ${capitalize(comChoice)} beats ${usrChoice}`)
-            console.log(`You: ${usrScore}, Computer: ${++comScore}`);
+            roundResult.textContent = `Computer wins! ${capitalize(comChoice)} beats ${usrChoice}`;
+            counter.textContent = `You: ${usrScore}, Computer: ${++comScore}`;
         } else if (result > 0) {
-            console.log(`You win! ${capitalize(usrChoice)} beats ${comChoice}`)
-            console.log(`You: ${++usrScore}, Computer: ${comScore}`);
+            roundResult.textContent = `You win! ${capitalize(usrChoice)} beats ${comChoice}`;
+            counter.textContent = `You: ${++usrScore}, Computer: ${comScore}`;
         }   
-    }
+    
 
-    // Declare the final winner 
-    if (usrScore > comScore) {
-        console.log(`Congrats! You beat the computer ${usrScore} to ${comScore}`);
-    } else if (comScore > usrScore) {
-        console.log(`Uh-oh! You lost to the computer ${comScore} to ${usrScore}`);
-    } else if (usrScore === comScore) {
-        console.log(`You tied! Play again?`);
-    }
+    // // Declare the final winner 
+    // if (usrScore > comScore) {
+    //     console.log(`Congrats! You beat the computer ${usrScore} to ${comScore}`);
+    // } else if (comScore > usrScore) {
+    //     console.log(`Uh-oh! You lost to the computer ${comScore} to ${usrScore}`);
+    // } else if (usrScore === comScore) {
+    //     console.log(`You tied! Play again?`);
+    // }
     
 }
 
@@ -73,5 +98,4 @@ function capitalize(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-game();
 
